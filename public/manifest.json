@@ -2,7 +2,7 @@
   "name": "Canvas Class Average",
   "description": "See Canvas class averages.",
   "author": "Daniel Stoiber",
-  "version": "2.0",
+  "version": "2.1",
   "manifest_version": 3,
   "permissions": [
     "scripting"
@@ -11,11 +11,17 @@
     {
       "matches": [
         "https://*.instructure.com/courses/*/grades",
+        "https://*.instructure.com/profile/settings",
         "https://canvas.wpi.edu/courses/*/grades",
+        "https://canvas.wpi.edu/profile/settings",
         "https://canvas.olin.edu/courses/*/grades",
+        "https://canvas.olin.edu/profile/settings",
         "https://canvas.calpoly.edu/courses/*/grades",
+        "https://canvas.calpoly.edu/profile/settings",
         "https://canvas.pratt.edu/courses/*/grades",
-        "https://canvas.ucla.edu/courses/*/grades"
+        "https://canvas.pratt.edu/profile/settings",
+        "https://canvas.ucla.edu/courses/*/grades",
+        "https://canvas.ucla.edu/profile/settings"
       ],
       "js": [
         "content.js"
