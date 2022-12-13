@@ -1,6 +1,7 @@
 import { devLog } from "./devLog";
 import { getGradesByWeightGroup } from "./getGradesByWeightGroup";
 import { getUserScore } from "./getUserScore";
+import { onlyGradedAssignments } from "./onlyGradedAssignmentsToggle";
 import { getSettings } from "./settings";
 import { Assignment, GradeHistory, WeightGroups } from "./types";
 
@@ -24,6 +25,7 @@ function gradeChangeSpan(previousScore: number, currentScore: number): string {
 export function displayAverage(average: number, userScore: number, gradeHistory: GradeHistory[]) {
   const finalGradeElement = document.getElementById('student-grades-right-content')?.querySelector('.final_grade');
   const classAverageElement = document.createElement('div');
+  classAverageElement.id = 'cca-class-average';
   classAverageElement.innerText = `Class Average: `;
 
   // If there is no final grade element, return
@@ -32,8 +34,11 @@ export function displayAverage(average: number, userScore: number, gradeHistory:
     return;
   }
 
+  // Sort grade history by date
+  const sortedGradeHistory = gradeHistory.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   // Get the previous average, or set it to the current average if there is no previous average
-  const previousAverage: number = gradeHistory.length <= 1 ? average : gradeHistory[gradeHistory.length - 2].average;
+  const previousAverage: number = sortedGradeHistory.length <= 1 ? average : sortedGradeHistory[1].average;
 
   // Create the class average percent element
   let averagePercentSpan: string = gradeChangeSpan(previousAverage, average);
@@ -61,6 +66,43 @@ export function displayAverage(average: number, userScore: number, gradeHistory:
 
 }
 
+// Update the average under the user's total score
+export function updateAverageDisplay(average: number, userScore: number, gradeHistory: GradeHistory[]) {
+
+  const classAverageElement = document.getElementById('cca-class-average');
+
+  // If there is no final grade element, return
+  if (!classAverageElement) {
+    devLog('No class average element found', 'err');
+    return;
+  }
+
+  // Sort grade history by date
+  const sortedGradeHistory = gradeHistory.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  // Get the previous average, or set it to the current average if there is no previous average
+  const previousAverage: number = sortedGradeHistory.length <= 1 ? average : sortedGradeHistory[0].average;
+
+  // Create the class average percent element
+  let averagePercentSpan: string = gradeChangeSpan(previousAverage, average);
+
+  // If enabled, display how the user's score compares to the class average
+  if (getSettings('averageComparison').value) {
+
+    if (average > userScore) {
+      const averageDifference = ((Math.abs(average - userScore) * 100).toFixed(2));
+      averagePercentSpan += `<span style="font-style: italic;"> (You are ${averageDifference}% behind the class average)</span>`;
+    } else if (average < userScore) {
+      const averageDifference = ((Math.abs(userScore - average) * 100).toFixed(2));
+      averagePercentSpan += `<span style="font-style: italic;"> (You are ${averageDifference}% ahead of the class average)</span>`;
+    }
+  }
+
+  // Add the average percent element to the class average element
+  classAverageElement.innerHTML = `Class Average: ${averagePercentSpan}`;
+
+}
+
 // Display user's grade change
 export function displayGradeChange(gradeHistory: GradeHistory[]) {
   const finalGradeElement = document.getElementById('student-grades-right-content')?.querySelector('.final_grade');
@@ -71,8 +113,11 @@ export function displayGradeChange(gradeHistory: GradeHistory[]) {
     return;
   }
 
+  // Sort grade history by date
+  const sortedGradeHistory = gradeHistory.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   // Get the previous user score
-  const previousScore: number = gradeHistory[gradeHistory.length - 2].total;
+  const previousScore: number = sortedGradeHistory[1].total;
 
   // Create the new total percent element
   const totalPercentSpan: string = gradeChangeSpan(previousScore, getUserScore());
@@ -184,22 +229,22 @@ export function displayGradeHistory(gradeHistory: GradeHistory[]) {
   // Add table body
   const gradeHistoryTableBody = document.createElement('tbody');
 
-  // Reverse the average history so the most recent is at the top
-  gradeHistory.reverse();
+  // Sort grade history by date
+  let sortedGradeHistory = gradeHistory.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   // Remove the first element
-  gradeHistory.shift();
+  sortedGradeHistory.shift();
   // Trim list to 10
-  gradeHistory = gradeHistory.slice(0, 10);
+  sortedGradeHistory = sortedGradeHistory.slice(0, 10);
 
   // Add table rows
-  gradeHistory.forEach((gradeHistoryItem, index) => {
-    const previousGradeHistory = gradeHistory[index + 1];
+  sortedGradeHistory.forEach((gradeHistoryItem, index) => {
+    const previousGradeHistory = sortedGradeHistory[index + 1];
     gradeHistoryTableBody.appendChild(gradeHistoryRow(gradeHistoryItem, previousGradeHistory));
   });
 
   // Append table body
   gradeHistoryTable.appendChild(gradeHistoryTableBody);
-
 
   const hideShowHistoryButton = hideShowGradeHistoryButton(gradeHistoryTable);
 
@@ -261,9 +306,11 @@ export function displayAverageByWeightGroup(assignments: Assignment[], weightGro
     // If the weight group average doesn't exist, return
     if (!weightGroupAverage && weightGroupName !== 'total') {
       averageCell.innerText = '-';
+      averageCell.classList.add('cca-no-score');
     } else if (weightGroupName === 'total') {
       // Populate the average cell with average
       averageCell.innerText = `${(average * 100).toFixed(1)}%`;
+      averageCell.id = 'cca-weight-table-total-average';
     } else {
       // Populate the average cell with average
       averageCell.innerText = `${((weightGroupAverage.average / weightGroupAverage.possible) * 100).toFixed(1)}%`;
@@ -273,6 +320,30 @@ export function displayAverageByWeightGroup(assignments: Assignment[], weightGro
     // Add the average cell to the weight group row
     weightRow.appendChild(averageCell);
   });
+}
+
+// Update average by weight group
+export function updateAverageAndScoreByWeightGroup(average: number, userScore: number) {
+  const averageCell = document.getElementById('cca-weight-table-total-average');
+  const scoreCell = document.getElementById('cca-weight-table-total-score');
+  const noScoreCells = Array.from(document.getElementsByClassName('cca-no-score'));
+
+  // Update the average cell
+  if (averageCell) {
+    averageCell.innerText = `${(average * 100).toFixed(1)}%`;
+  }
+
+  // Update the users score cell
+  if (scoreCell) {
+    scoreCell.innerText = `${(userScore * 100).toFixed(1)}%`;
+  }
+
+  // Update the no score cells
+  if (noScoreCells.length > 0) {
+    noScoreCells.forEach((noScoreCell) => {
+      noScoreCell.textContent = onlyGradedAssignments() ? '-' : '0%';
+    });
+  }
 }
 
 // Display user's score by weight group
@@ -320,9 +391,11 @@ export function displayScoreByWeightGroup(assignments: Assignment[], weightGroup
     // If the weight group score doesn't exist, return
     if (!weightGroupScore && weightGroupName !== 'total') {
       scoreCell.innerText = '-';
+      scoreCell.classList.add('cca-no-score');
     } else if (weightGroupName === 'total') {
       // Populate the score cell with score
       scoreCell.innerText = `${(userScore * 100).toFixed(1)}%`;
+      scoreCell.id = 'cca-weight-table-total-score';
     } else {
       // Populate the score cell with score
       scoreCell.innerText = `${((weightGroupScore.score / weightGroupScore.possible) * 100).toFixed(1)}%`;

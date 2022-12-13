@@ -1,10 +1,11 @@
 import { getGradesByWeightGroup } from "./getGradesByWeightGroup";
+import { onlyGradedAssignments } from "./onlyGradedAssignmentsToggle";
 import { Assignment, GroupScores, WeightGroups } from "./types";
 
-export function getClassAverage(assignmentList: Assignment[], weightGroups: WeightGroups): number {
+export function getClassAverage(assignments: Assignment[], weightGroups: WeightGroups): number {
 
   // Get group scores
-  const groupScores: GroupScores = getGradesByWeightGroup(assignmentList, weightGroups);
+  const groupScores: GroupScores = getGradesByWeightGroup(assignments, weightGroups);
 
   let classAverage = 0;
 
@@ -14,14 +15,16 @@ export function getClassAverage(assignmentList: Assignment[], weightGroups: Weig
     classAverage += (groupScore.average / groupScore.possible) * weightGroups[group];
   }
 
-  // Adjust total for missing weight group averages
-  for (const group in weightGroups) {
-    if (!groupScores[group] && group !== 'total' && weightGroups[group] > 0) {
-      weightGroups.total -= weightGroups[group];
+  // Add percentage for missing weights if only graded assignments is checked
+  let totalMissingWeight = 1 - weightGroups.total;
+  if (onlyGradedAssignments()) {
+    for (const group in weightGroups) {
+      if (!groupScores[group] && group !== 'total' && weightGroups[group] > 0) {
+        totalMissingWeight += weightGroups[group];
+      }
     }
   }
 
-
   // Return the average of all assignments
-  return classAverage / weightGroups.total;
+  return classAverage + totalMissingWeight;
 }
