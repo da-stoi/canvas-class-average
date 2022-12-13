@@ -10,8 +10,16 @@ export function getGradeHistory(courseId: number): GradeHistory[] {
     return [];
   }
 
+  const parsedGradeHistory = JSON.parse(gradeHistory);
+
+  // Sort grade history by date
+  const sortedGradeHistory = parsedGradeHistory.sort((a: GradeHistory, b: GradeHistory) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
+
+
   // Return the parsed grade history
-  return JSON.parse(gradeHistory);
+  return sortedGradeHistory;
 }
 
 export function setGradeHistory(courseId: number, gradeHistory: GradeHistory) {

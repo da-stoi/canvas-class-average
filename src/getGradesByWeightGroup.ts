@@ -1,12 +1,12 @@
 import { devLog } from "./devLog";
 import { Assignment, GroupScores, WeightGroups } from "./types";
 
-export function getGradesByWeightGroup(assignmentList: Assignment[], weightGroups: WeightGroups): GroupScores {
+export function getGradesByWeightGroup(assignments: Assignment[], weightGroups: WeightGroups): GroupScores {
 
   let groupScores: GroupScores = {};
 
   // For each assignment, calculate the weighted score
-  assignmentList.forEach((assignment: Assignment) => {
+  assignments.forEach((assignment: Assignment) => {
     if (assignment.countsTowardsFinal && !assignment.dropped && assignment.hasAverage) {
 
       if (Object.keys(weightGroups).length <= 1 || !assignment.group || !weightGroups[assignment.group]) {

@@ -14,6 +14,7 @@ import { configureSettings, displaySettings, getSettings } from "./settings";
 import { getWeightGroups } from "./getWeightGroups";
 import { Assignment, WeightGroups } from "./types";
 import { displayInaccuracies } from "./getInaccuracies";
+import { setOnlyGradedAssignmentsHandler } from "./onlyGradedAssignmentsToggle";
 
 function gradesPage() {
 
@@ -35,15 +36,20 @@ function gradesPage() {
   // Get user score
   const userScore: number = getUserScore();
 
-  // Set the grade history
-  setGradeHistory(courseId, {
-    date: new Date(),
-    average: classAverage,
-    total: userScore
-  });
+  // Set the grade history only if the class average and user score are defined
+  if (classAverage && userScore) {
+    setGradeHistory(courseId, {
+      date: new Date(),
+      average: classAverage,
+      total: userScore
+    });
+  }
 
   // Get the grade history
   const gradeHistory = getGradeHistory(courseId);
+
+  // Set only graded assignments handler
+  setOnlyGradedAssignmentsHandler(gradeHistory, assignments, weightGroups);
 
   // Display the class average
   displayAverage(classAverage, userScore, gradeHistory);
