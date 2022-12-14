@@ -18,6 +18,7 @@ To change settings, go to the Canvas settings page by clicking your profile pict
 - Displays your grade and the average grade by weight group.
   - If used, weight groups are how your instructor makes an exam worth more towards your final grade than homework for example.
 - Is transparent about how and when the class average may be inaccurate.
+- Average reacts appropriately when selecting the "Calculate based only on graded assignments" checkbox
 
 ### Things to note
 - The average may not be 100% accurate, especially if your instructor doesn't use Canvas correctly. 
