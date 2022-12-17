@@ -15,6 +15,7 @@ import { getWeightGroups } from "./getWeightGroups";
 import { Assignment, WeightGroups } from "./types";
 import { displayInaccuracies } from "./getInaccuracies";
 import { setOnlyGradedAssignmentsHandler } from "./onlyGradedAssignmentsToggle";
+import { averagesPublished } from "./averagesPublished";
 
 function gradesPage() {
 
@@ -35,6 +36,12 @@ function gradesPage() {
 
   // Get user score
   const userScore: number = getUserScore();
+
+  // If the instructor has not published the averages, display a message and return
+  if (averagesPublished(assignments) === false) {
+    displayAverage(false, userScore, []);
+    return;
+  }
 
   // Set the grade history only if the class average and user score are defined
   if (classAverage && userScore) {

@@ -22,7 +22,7 @@ function gradeChangeSpan(previousScore: number, currentScore: number): string {
 }
 
 // Display the average under the user's total score
-export function displayAverage(average: number, userScore: number, gradeHistory: GradeHistory[]) {
+export function displayAverage(average: number | boolean, userScore: number, gradeHistory: GradeHistory[]) {
   const finalGradeElement = document.getElementById('student-grades-right-content')?.querySelector('.final_grade');
   const classAverageElement = document.createElement('div');
   classAverageElement.id = 'cca-class-average';
@@ -31,6 +31,27 @@ export function displayAverage(average: number, userScore: number, gradeHistory:
   // If there is no final grade element, return
   if (!finalGradeElement) {
     devLog('No final grade element found', 'err');
+    return;
+  }
+
+  // If the average is false, display N/A
+  if (average === false) {
+    // Set the class average element to N/A 
+    classAverageElement.innerText += 'N/A';
+    const naReason = document.createElement('span');
+
+    // Add reason why the average is N/A
+    naReason.innerText = ' (Averages not published)';
+    naReason.style.fontStyle = 'italic';
+    classAverageElement.appendChild(naReason);
+
+    // Update DOM
+    finalGradeElement.appendChild(classAverageElement);
+    return;
+  }
+
+  // This should never happen, but to please TypeScript, return
+  if (average === true) {
     return;
   }
 
