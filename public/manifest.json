@@ -21,7 +21,11 @@
         "https://canvas.pratt.edu/courses/*/grades",
         "https://canvas.pratt.edu/profile/settings",
         "https://canvas.ucla.edu/courses/*/grades",
-        "https://canvas.ucla.edu/profile/settings"
+        "https://canvas.ucla.edu/profile/settings",
+        "https://carmen.osu.edu/courses/*/grades",
+        "https://carmen.osu.edu/profile/settings",
+        "https://canvas.uw.edu/courses/*/grades",
+        "https://canvas.uw.edu/profile/settings"
       ],
       "js": [
         "content.js"
