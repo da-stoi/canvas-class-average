@@ -59,12 +59,13 @@ export function getAssignments(): Assignment[] {
     // Get the assignment average score
     const average: number = parseFloat(scoreDetails?.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[0].getElementsByTagName('td')[0].innerText?.trim().split('\n')[1].trim() || '0');
 
-    // Get the assignment possible score (total points)
-    const possible: number = parseFloat(assignment.querySelector('.possible')?.textContent?.trim() || '0');
-
     let score: number = 0;
     // Handle pass/fail assignments
     const gradeElement = assignment.querySelector('.grade');
+
+    // Get the possible score
+    const possible: number = parseFloat(gradeElement?.nextElementSibling?.textContent?.split('/')[1].trim() || '0');
+
     const gradeIcon = gradeElement?.getElementsByTagName('i')[0];
     if (gradeIcon && gradeIcon.classList.contains('icon-check')) {
       score = possible;
