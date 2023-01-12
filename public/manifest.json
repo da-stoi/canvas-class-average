@@ -25,7 +25,11 @@
         "https://carmen.osu.edu/courses/*/grades",
         "https://carmen.osu.edu/profile/settings",
         "https://canvas.uw.edu/courses/*/grades",
-        "https://canvas.uw.edu/profile/settings"
+        "https://canvas.uw.edu/profile/settings",
+        "https://bcourses.berkeley.edu/courses/*/grades",
+        "https://bcourses.berkeley.edu/profile/settings",
+        "https://online.smc.edu/courses/*/grades",
+        "https://online.smc.edu/profile/settings"
       ],
       "js": [
         "content.js"
