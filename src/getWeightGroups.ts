@@ -22,7 +22,13 @@ export function getWeightGroups(): WeightGroups {
     const group: string = row.querySelector('th')?.innerText.trim().toLowerCase() || '';
     const weight: number = parseFloat(row.querySelector('td')?.innerText.trim().split('%')[0] || '0') / 100;
 
+    // Ignore group if it is empty and has a weight of 0
     if (group === '' && weight === 0) {
+      return;
+    }
+
+    // Ignore duplicate groups if they have a weight of 0
+    if (Object.keys(weightGroups).includes(group) && weight === 0) {
       return;
     }
 

@@ -164,8 +164,6 @@ async function updateOldCourseHistoryFormat(course: number): Promise<void> {
     return;
   }
 
-  console.log('We just got here', oldCourseHistory);
-
   // Parse the old course history
   oldCourseHistory = JSON.parse(oldCourseHistory);
 
