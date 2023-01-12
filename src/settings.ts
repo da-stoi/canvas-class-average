@@ -129,7 +129,7 @@ export async function displaySettings() {
 
   // Add disclaimer to settings section
   const settingsDisclaimer = document.createElement('p');
-  settingsDisclaimer.innerText = 'Settings in this section are saved to your browser\'s local storage. If you clear your browser\'s local storage, your settings will be reset. In addition, if you use a different browser or device, your settings will not be saved.\n\nThis section of settings is added by the ';
+  settingsDisclaimer.innerText = 'Settings in this section should sync between chrome browsers on different computers if you are signed into the same Google account on both.\n\nThis section of settings is added by the ';
   const settingsDisclaimerLink = document.createElement('a');
   settingsDisclaimerLink.href = 'https://s.stoiber.network/cca';
   settingsDisclaimerLink.innerText = 'Canvas Class Average extension';
