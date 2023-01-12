@@ -7,7 +7,7 @@ function getInaccuracies(assignments: Assignment[], weightGroups: WeightGroups) 
   const inaccuracies = [];
 
   // Check if there is a weight group table published
-  if (weightGroups.length <= 1) {
+  if (Object.keys(weightGroups).length <= 1) {
     inaccuracies.push('Your instructor has not published weight groups. This may cause inaccuracies.');
   }
 
