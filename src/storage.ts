@@ -1,6 +1,7 @@
 import { devLog } from "./devLog";
 import { GradeHistory, Settings } from "./types";
 
+// Get grade history for a course
 export async function getGradeHistory(course: number): Promise<GradeHistory[]> {
 
   await updateOldCourseHistoryFormat(course);
@@ -22,6 +23,7 @@ export async function getGradeHistory(course: number): Promise<GradeHistory[]> {
   return sortedGradeHistory;
 }
 
+// Append grade history for a course
 export async function appendGradeHistory(course: number, average: number, total: number): Promise<object> {
 
   // Create the new grade history object
@@ -128,6 +130,7 @@ export async function toggleSetting(setting: string): Promise<boolean> {
   return newState;
 }
 
+// Get single setting
 export async function getSetting(setting: string): Promise<boolean> {
 
   // Get existing cca data
@@ -140,6 +143,7 @@ export async function getSetting(setting: string): Promise<boolean> {
   return cca.settings[setting].value;
 }
 
+// Get all settings
 export async function getSettings(): Promise<Settings> {
 
   // Get existing cca data
@@ -149,6 +153,7 @@ export async function getSettings(): Promise<Settings> {
   return cca.settings;
 }
 
+// Update old course history format to new course history format
 async function updateOldCourseHistoryFormat(course: number): Promise<void> {
 
   // Get old grade history from local storage

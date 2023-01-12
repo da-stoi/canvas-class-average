@@ -2,6 +2,7 @@ import { getGradesByWeightGroup } from "./getGradesByWeightGroup";
 import { onlyGradedAssignments } from "./onlyGradedAssignmentsToggle";
 import { Assignment, GroupScores, WeightGroups } from "./types";
 
+// Get class average from assignments array and weight groups
 export function getClassAverage(assignments: Assignment[], weightGroups: WeightGroups): number {
 
   // Get group scores

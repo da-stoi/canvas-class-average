@@ -1,5 +1,6 @@
 import { getSetting } from "./storage";
 
+// Log to console if devMode is enabled
 export async function devLog(text: string, logType: 'err' | 'warn' | null = null,): Promise<void> {
 
   const devMode = await getSetting('devMode');

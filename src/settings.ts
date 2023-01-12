@@ -40,6 +40,7 @@ const defaultSettings: Settings = {
   }
 };
 
+// Add settings to storage if they have never been added, or append new settings from last update
 export async function configureSettings(): Promise<void> {
 
   // Get settings from local storage

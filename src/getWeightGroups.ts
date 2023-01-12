@@ -1,5 +1,6 @@
 import { WeightGroups } from "./types";
 
+// Get weight groups from the weight table
 export function getWeightGroups(): WeightGroups {
 
   const weightGroups: WeightGroups = {
