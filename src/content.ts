@@ -1,6 +1,6 @@
 import { getAssignments } from "./getAssignments";
 import { getClassAverage } from "./getClassAverage";
-import { getGradeHistory, setGradeHistory } from "./gradeHistory";
+import { getGradeHistory, appendGradeHistory } from "./storage";
 import {
   displayAverage,
   displayAverageByWeightGroup,
@@ -10,17 +10,18 @@ import {
 } from "./displayGradeData";
 import { getUserScore } from "./getUserScore";
 import { getCourseId } from "./getCourseId";
-import { configureSettings, displaySettings, getSettings } from "./settings";
+import { configureSettings, displaySettings } from "./settings";
+import { getSettings } from "./storage";
 import { getWeightGroups } from "./getWeightGroups";
 import { Assignment, WeightGroups } from "./types";
 import { displayInaccuracies } from "./getInaccuracies";
 import { setOnlyGradedAssignmentsHandler } from "./onlyGradedAssignmentsToggle";
 import { averagesPublished } from "./averagesPublished";
 
-function gradesPage() {
+async function gradesPage() {
 
   // Get settings
-  const settings = getSettings();
+  const settings = await getSettings();
 
   // Get the course ID
   const courseId: number = getCourseId();
@@ -45,15 +46,11 @@ function gradesPage() {
 
   // Set the grade history only if the class average and user score are defined
   if (classAverage && userScore) {
-    setGradeHistory(courseId, {
-      date: new Date(),
-      average: classAverage,
-      total: userScore
-    });
+    await appendGradeHistory(courseId, classAverage, userScore);
   }
 
   // Get the grade history
-  const gradeHistory = getGradeHistory(courseId);
+  const gradeHistory = await getGradeHistory(courseId);
 
   // Set only graded assignments handler
   setOnlyGradedAssignmentsHandler(gradeHistory, assignments, weightGroups);

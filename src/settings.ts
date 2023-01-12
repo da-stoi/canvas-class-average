@@ -1,4 +1,5 @@
 import { devLog } from "./devLog";
+import { getSettings, setSetting, setSettings, toggleSetting } from "./storage";
 import { Settings } from "./types";
 
 const defaultSettings: Settings = {
@@ -39,15 +40,16 @@ const defaultSettings: Settings = {
   }
 };
 
-export function configureSettings() {
+export async function configureSettings(): Promise<void> {
 
   // Get settings from local storage
-  const settings: Settings = getSettings();
+  const settings: Settings = await getSettings();
 
   // If settings page has never been loaded, set default settings
   if (!settings) {
-    localStorage.setItem('cca-settings', JSON.stringify(defaultSettings));
+    await setSettings(defaultSettings);
     devLog('Settings have never been loaded. Setting default settings.', 'warn');
+    return;
   }
 
   // If saved settings are missing, add them
@@ -56,55 +58,20 @@ export function configureSettings() {
       settings[setting] = defaultSettings[setting];
 
       // Save the settings
-      localStorage.setItem('cca-settings', JSON.stringify(settings));
+      await setSetting(setting, settings[setting]);
 
       devLog(`Added setting ${setting}.`, 'warn');
     }
   }
-}
 
-export function getSettings(key: string | null = null) {
-
-  // Get settings from local storage
-  const settings = localStorage.getItem('cca-settings');
-
-  // Return all settings if no key is provided
-  if (settings && !key) {
-    devLog('Got all settings.');
-    return JSON.parse(settings);
-  }
-
-  // Return the setting if it exists
-  if (settings && key) {
-    // Don't log devMode to avoid recursion
-    if (key !== 'devMode') {
-      devLog(`Got setting ${key}.`);
-    }
-    return JSON.parse(settings)[key];
-  }
-
-}
-
-// Toggle settings
-function toggleSetting(key: string) {
-  const settings = getSettings();
-
-  // Toggle the setting
-  settings[key].value = !settings[key].value;
-
-  // Save the settings
-  localStorage.setItem('cca-settings', JSON.stringify(settings));
-
-  devLog(`Toggled setting ${key} from ${!settings[key].value} to ${settings[key].value}.`);
-
-  return settings[key];
+  return;
 }
 
 // Display settings page
-export function displaySettings() {
+export async function displaySettings() {
 
   const settingsContent = document.getElementById('content');
-  const settings = getSettings();
+  const settings = await getSettings();
 
   // If the settings content does not exist, return
   if (!settingsContent) {
