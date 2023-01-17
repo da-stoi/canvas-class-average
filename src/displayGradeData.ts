@@ -2,7 +2,7 @@ import { devLog } from "./devLog";
 import { getGradesByWeightGroup } from "./getGradesByWeightGroup";
 import { getUserScore } from "./getUserScore";
 import { onlyGradedAssignments } from "./onlyGradedAssignmentsToggle";
-import { getSettings } from "./settings";
+import { getSetting } from "./storage";
 import { Assignment, GradeHistory, WeightGroups } from "./types";
 
 // Create the grade change percentage element
@@ -22,7 +22,7 @@ function gradeChangeSpan(previousScore: number, currentScore: number): string {
 }
 
 // Display the average under the user's total score
-export function displayAverage(average: number | boolean, userScore: number, gradeHistory: GradeHistory[]) {
+export async function displayAverage(average: number | boolean, userScore: number, gradeHistory: GradeHistory[]) {
   const finalGradeElement = document.getElementById('student-grades-right-content')?.querySelector('.final_grade');
   const classAverageElement = document.createElement('div');
   classAverageElement.id = 'cca-class-average';
@@ -65,7 +65,7 @@ export function displayAverage(average: number | boolean, userScore: number, gra
   let averagePercentSpan: string = gradeChangeSpan(previousAverage, average);
 
   // If enabled, display how the user's score compares to the class average
-  if (getSettings('averageComparison').value) {
+  if (await getSetting('averageComparison')) {
 
     if (average > userScore) {
       const averageDifference = ((Math.abs(average - userScore) * 100).toFixed(2));
@@ -88,7 +88,7 @@ export function displayAverage(average: number | boolean, userScore: number, gra
 }
 
 // Update the average under the user's total score
-export function updateAverageDisplay(average: number, userScore: number, gradeHistory: GradeHistory[]) {
+export async function updateAverageDisplay(average: number, userScore: number, gradeHistory: GradeHistory[]) {
 
   const classAverageElement = document.getElementById('cca-class-average');
 
@@ -108,7 +108,7 @@ export function updateAverageDisplay(average: number, userScore: number, gradeHi
   let averagePercentSpan: string = gradeChangeSpan(previousAverage, average);
 
   // If enabled, display how the user's score compares to the class average
-  if (getSettings('averageComparison').value) {
+  if (await getSetting('averageComparison')) {
 
     if (average > userScore) {
       const averageDifference = ((Math.abs(average - userScore) * 100).toFixed(2));

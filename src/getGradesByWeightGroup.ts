@@ -1,6 +1,7 @@
 import { devLog } from "./devLog";
 import { Assignment, GroupScores, WeightGroups } from "./types";
 
+// Get grades by weight group from assignments array and weight groups
 export function getGradesByWeightGroup(assignments: Assignment[], weightGroups: WeightGroups): GroupScores {
 
   let groupScores: GroupScores = {};

@@ -2,10 +2,10 @@
   "name": "Canvas Class Average",
   "description": "See Canvas class averages.",
   "author": "Daniel Stoiber",
-  "version": "2.1",
+  "version": "2.2",
   "manifest_version": 3,
   "permissions": [
-    "scripting"
+    "storage"
   ],
   "content_scripts": [
     {

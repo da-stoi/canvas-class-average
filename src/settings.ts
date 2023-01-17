@@ -1,4 +1,5 @@
 import { devLog } from "./devLog";
+import { getSettings, setSetting, setSettings, toggleSetting } from "./storage";
 import { Settings } from "./types";
 
 const defaultSettings: Settings = {
@@ -39,15 +40,17 @@ const defaultSettings: Settings = {
   }
 };
 
-export function configureSettings() {
+// Add settings to storage if they have never been added, or append new settings from last update
+export async function configureSettings(): Promise<void> {
 
   // Get settings from local storage
-  const settings: Settings = getSettings();
+  const settings: Settings = await getSettings();
 
   // If settings page has never been loaded, set default settings
   if (!settings) {
-    localStorage.setItem('cca-settings', JSON.stringify(defaultSettings));
+    await setSettings(defaultSettings);
     devLog('Settings have never been loaded. Setting default settings.', 'warn');
+    return;
   }
 
   // If saved settings are missing, add them
@@ -56,55 +59,20 @@ export function configureSettings() {
       settings[setting] = defaultSettings[setting];
 
       // Save the settings
-      localStorage.setItem('cca-settings', JSON.stringify(settings));
+      await setSetting(setting, settings[setting]);
 
       devLog(`Added setting ${setting}.`, 'warn');
     }
   }
-}
 
-export function getSettings(key: string | null = null) {
-
-  // Get settings from local storage
-  const settings = localStorage.getItem('cca-settings');
-
-  // Return all settings if no key is provided
-  if (settings && !key) {
-    devLog('Got all settings.');
-    return JSON.parse(settings);
-  }
-
-  // Return the setting if it exists
-  if (settings && key) {
-    // Don't log devMode to avoid recursion
-    if (key !== 'devMode') {
-      devLog(`Got setting ${key}.`);
-    }
-    return JSON.parse(settings)[key];
-  }
-
-}
-
-// Toggle settings
-function toggleSetting(key: string) {
-  const settings = getSettings();
-
-  // Toggle the setting
-  settings[key].value = !settings[key].value;
-
-  // Save the settings
-  localStorage.setItem('cca-settings', JSON.stringify(settings));
-
-  devLog(`Toggled setting ${key} from ${!settings[key].value} to ${settings[key].value}.`);
-
-  return settings[key];
+  return;
 }
 
 // Display settings page
-export function displaySettings() {
+export async function displaySettings() {
 
   const settingsContent = document.getElementById('content');
-  const settings = getSettings();
+  const settings = await getSettings();
 
   // If the settings content does not exist, return
   if (!settingsContent) {
@@ -161,7 +129,7 @@ export function displaySettings() {
 
   // Add disclaimer to settings section
   const settingsDisclaimer = document.createElement('p');
-  settingsDisclaimer.innerText = 'Settings in this section are saved to your browser\'s local storage. If you clear your browser\'s local storage, your settings will be reset. In addition, if you use a different browser or device, your settings will not be saved.\n\nThis section of settings is added by the ';
+  settingsDisclaimer.innerText = 'Settings in this section should sync between chrome browsers on different computers if you are signed into the same Google account on both.\n\nThis section of settings is added by the ';
   const settingsDisclaimerLink = document.createElement('a');
   settingsDisclaimerLink.href = 'https://s.stoiber.network/cca';
   settingsDisclaimerLink.innerText = 'Canvas Class Average extension';

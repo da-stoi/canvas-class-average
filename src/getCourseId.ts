@@ -1,5 +1,6 @@
 import { devLog } from "./devLog";
 
+// Get the course ID for the current grade page
 export function getCourseId(): number {
   
   // Get the course ID from the URL

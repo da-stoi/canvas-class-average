@@ -2,6 +2,7 @@ import { devLog } from "./devLog";
 import { getGradesByWeightGroup } from "./getGradesByWeightGroup";
 import { Assignment, WeightGroups } from "./types";
 
+// Compile a list of possible inaccuracies in the course average calculation
 function getInaccuracies(assignments: Assignment[], weightGroups: WeightGroups) {
 
   const inaccuracies = [];
