@@ -29,7 +29,9 @@
         "https://bcourses.berkeley.edu/courses/*/grades",
         "https://bcourses.berkeley.edu/profile/settings",
         "https://online.smc.edu/courses/*/grades",
-        "https://online.smc.edu/profile/settings"
+        "https://online.smc.edu/profile/settings",
+        "https://egator.greenriver.edu/courses/*/grades",
+        "https://egator.greenriver.edu/profile/settings"
       ],
       "js": [
         "content.js"
