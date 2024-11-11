@@ -21,8 +21,8 @@ export type GroupScores = {
     average: number;
     score: number;
     possible: number;
-  }
-}
+  };
+};
 
 export type GradeHistory = {
   date: Date;

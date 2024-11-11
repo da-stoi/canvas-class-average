@@ -1,55 +1,58 @@
-import { devLog } from "./devLog";
-import { getSettings, setSetting, setSettings, toggleSetting } from "./storage";
-import { Settings } from "./types";
+import { devLog } from './devLog';
+import { getSettings, setSetting, setSettings, toggleSetting } from './storage';
+import { Settings } from './types';
 
 const defaultSettings: Settings = {
-  'gradeChange': {
+  gradeChange: {
     value: true,
     name: 'Show Grade Change',
-    description: 'Show how your grade has changed from your previous grade.'
+    description: 'Show how your grade has changed from your previous grade.',
   },
-  'inaccuracies': {
+  inaccuracies: {
     value: true,
     name: 'Show Inaccuracies',
-    description: 'List specific reasons why the average grade may be inaccurate.'
+    description:
+      'List specific reasons why the average grade may be inaccurate.',
   },
-  'gradeHistory': {
+  gradeHistory: {
     value: true,
     name: 'Show Grade History',
-    description: 'Show a button to toggle a list of your previous grades.'
+    description: 'Show a button to toggle a list of your previous grades.',
   },
-  'averageComparison': {
+  averageComparison: {
     value: true,
     name: 'Show Average Comparison',
-    description: 'Show how your grade compares to the class average.'
+    description: 'Show how your grade compares to the class average.',
   },
-  'scoreByWeightGroup': {
+  scoreByWeightGroup: {
     value: true,
     name: 'Show Score by Weight Group',
-    description: 'Show your grade for each weight group.'
+    description: 'Show your grade for each weight group.',
   },
-  'averageByWeightGroup': {
+  averageByWeightGroup: {
     value: true,
     name: 'Show Average by Weight Group',
-    description: 'Show the average grade for each weight group.'
+    description: 'Show the average grade for each weight group.',
   },
-  'devMode': {
+  devMode: {
     value: false,
     name: 'Developer Mode',
-    description: 'Shows additional information for development purposes.'
-  }
+    description: 'Shows additional information for development purposes.',
+  },
 };
 
 // Add settings to storage if they have never been added, or append new settings from last update
 export async function configureSettings(): Promise<void> {
-
   // Get settings from local storage
   const settings: Settings = await getSettings();
 
   // If settings page has never been loaded, set default settings
   if (!settings) {
     await setSettings(defaultSettings);
-    devLog('Settings have never been loaded. Setting default settings.', 'warn');
+    devLog(
+      'Settings have never been loaded. Setting default settings.',
+      'warn'
+    );
     return;
   }
 
@@ -70,7 +73,6 @@ export async function configureSettings(): Promise<void> {
 
 // Display settings page
 export async function displaySettings() {
-
   const settingsContent = document.getElementById('content');
   const settings = await getSettings();
 
@@ -89,7 +91,7 @@ export async function displaySettings() {
 
   // Create list of checkboxes for each setting
   const settingsList = document.createElement('ul');
-  Object.keys(settings).forEach(setting => {
+  Object.keys(settings).forEach((setting) => {
     const settingItem = document.createElement('li');
     const settingCheckbox = document.createElement('input');
     const settingLabel = document.createElement('label');
@@ -129,7 +131,8 @@ export async function displaySettings() {
 
   // Add disclaimer to settings section
   const settingsDisclaimer = document.createElement('p');
-  settingsDisclaimer.innerText = 'Settings in this section should sync between chrome browsers on different computers if you are signed into the same Google account on both.\n\nThis section of settings is added by the ';
+  settingsDisclaimer.innerText =
+    'Settings in this section should sync between chrome browsers on different computers if you are signed into the same Google account on both.\n\nThis section of settings is added by the ';
   const settingsDisclaimerLink = document.createElement('a');
   settingsDisclaimerLink.href = 'https://s.stoiber.network/cca';
   settingsDisclaimerLink.innerText = 'Canvas Class Average extension';

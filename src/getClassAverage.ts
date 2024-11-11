@@ -1,12 +1,17 @@
-import { getGradesByWeightGroup } from "./getGradesByWeightGroup";
-import { onlyGradedAssignments } from "./onlyGradedAssignmentsToggle";
-import { Assignment, GroupScores, WeightGroups } from "./types";
+import { getGradesByWeightGroup } from './getGradesByWeightGroup';
+import { onlyGradedAssignments } from './onlyGradedAssignmentsToggle';
+import { Assignment, GroupScores, WeightGroups } from './types';
 
 // Get class average from assignments array and weight groups
-export function getClassAverage(assignments: Assignment[], weightGroups: WeightGroups): number {
-
+export function getClassAverage(
+  assignments: Assignment[],
+  weightGroups: WeightGroups
+): number {
   // Get group scores
-  const groupScores: GroupScores = getGradesByWeightGroup(assignments, weightGroups);
+  const groupScores: GroupScores = getGradesByWeightGroup(
+    assignments,
+    weightGroups
+  );
 
   let classAverage = 0;
 
@@ -16,7 +21,8 @@ export function getClassAverage(assignments: Assignment[], weightGroups: WeightG
 
     const weightMultiplier = weightGroups[group] > 1 ? 1 : weightGroups[group];
 
-    classAverage += (groupScore.average / groupScore.possible) * weightMultiplier;
+    classAverage +=
+      (groupScore.average / groupScore.possible) * weightMultiplier;
   }
 
   // Add percentage for missing weights if only graded assignments is checked

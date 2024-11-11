@@ -1,25 +1,24 @@
-import { getAssignments } from "./getAssignments";
-import { getClassAverage } from "./getClassAverage";
-import { getGradeHistory, appendGradeHistory } from "./storage";
+import { getAssignments } from './getAssignments';
+import { getClassAverage } from './getClassAverage';
+import { getGradeHistory, appendGradeHistory } from './storage';
 import {
   displayAverage,
   displayAverageByWeightGroup,
   displayGradeChange,
   displayGradeHistory,
   displayScoreByWeightGroup,
-} from "./displayGradeData";
-import { getUserScore } from "./getUserScore";
-import { getCourseId } from "./getCourseId";
-import { configureSettings, displaySettings } from "./settings";
-import { getSettings } from "./storage";
-import { getWeightGroups } from "./getWeightGroups";
-import { Assignment, WeightGroups } from "./types";
-import { displayInaccuracies } from "./getInaccuracies";
-import { setOnlyGradedAssignmentsHandler } from "./onlyGradedAssignmentsToggle";
-import { averagesPublished } from "./averagesPublished";
+} from './displayGradeData';
+import { getUserScore } from './getUserScore';
+import { getCourseId } from './getCourseId';
+import { configureSettings, displaySettings } from './settings';
+import { getSettings } from './storage';
+import { getWeightGroups } from './getWeightGroups';
+import { Assignment, WeightGroups } from './types';
+import { displayInaccuracies } from './getInaccuracies';
+import { setOnlyGradedAssignmentsHandler } from './onlyGradedAssignmentsToggle';
+import { averagesPublished } from './averagesPublished';
 
 async function gradesPage() {
-
   // Get settings
   const settings = await getSettings();
 
@@ -82,7 +81,6 @@ async function gradesPage() {
   if (settings.scoreByWeightGroup.value) {
     displayScoreByWeightGroup(assignments, weightGroups, userScore);
   }
-
 }
 
 // Configure settings

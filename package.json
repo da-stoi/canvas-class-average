@@ -8,7 +8,7 @@
     "build": "yarn clean && webpack --config webpack/webpack.config.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Daniel Stoiber",
   "license": "GNU GPLv3",
   "dependencies": {},
   "devDependencies": {

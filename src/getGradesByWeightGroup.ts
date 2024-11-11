@@ -1,16 +1,25 @@
-import { devLog } from "./devLog";
-import { Assignment, GroupScores, WeightGroups } from "./types";
+import { devLog } from './devLog';
+import { Assignment, GroupScores, WeightGroups } from './types';
 
 // Get grades by weight group from assignments array and weight groups
-export function getGradesByWeightGroup(assignments: Assignment[], weightGroups: WeightGroups): GroupScores {
-
+export function getGradesByWeightGroup(
+  assignments: Assignment[],
+  weightGroups: WeightGroups
+): GroupScores {
   let groupScores: GroupScores = {};
 
   // For each assignment, calculate the weighted score
   assignments.forEach((assignment: Assignment) => {
-    if (assignment.countsTowardsFinal && !assignment.dropped && assignment.hasAverage) {
-
-      if (Object.keys(weightGroups).length <= 1 || !assignment.group || !weightGroups[assignment.group]) {
+    if (
+      assignment.countsTowardsFinal &&
+      !assignment.dropped &&
+      assignment.hasAverage
+    ) {
+      if (
+        Object.keys(weightGroups).length <= 1 ||
+        !assignment.group ||
+        !weightGroups[assignment.group]
+      ) {
         assignment.group = 'total';
       }
 
@@ -23,8 +32,8 @@ export function getGradesByWeightGroup(assignments: Assignment[], weightGroups: 
         groupScores[assignment.group] = {
           score: assignment.score,
           average: assignment.average,
-          possible: assignment.possible
-        }
+          possible: assignment.possible,
+        };
       }
     }
   });
